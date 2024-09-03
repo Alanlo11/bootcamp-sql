@@ -14,10 +14,10 @@ insert into orders2 (orders_no, total_amount, customer_id) values (5, 3598.48, 2
 
 select * from orders2 where customer_id = 2;
 
-select o.customer_id, sum(o.total_amount) amount from orders2 o group by o.customer_id;
+select o.customer_id, sum(o.total_amount) amount from orders2 o group by o.customer_id order by customer_id desc;
 
-select o.customer_id, sum(o.total_amount) amount from orders2 o group by o.customer_id having amount > 6000;
+select o.customer_id, sum(o.total_amount) amount from orders2 o group by o.customer_id having sum(o.total_amount) > 6000;
 
-
+select o.orders_no, o.total_amount, o.customer_id from orders2 o having o.total_amount > 3000;
 
 
