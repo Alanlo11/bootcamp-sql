@@ -37,8 +37,8 @@ create table departments(
 create table jobs(
 	job_id varchar(10) primary key,
     job_title varchar(35),
-    min_salary int,
-    max_salary int
+    min_salary numeric(8,2),
+    max_salary numeric(8,2)
 );
 
 create table employees(
@@ -49,8 +49,8 @@ create table employees(
     phone_number varchar(20),
     hire_date date,
     job_id varchar(10),
-    salary int,
-    commission_pct int,
+    salary numeric(8,2),
+    commission_pct numeric(5,2),
     manager_id int,
     department_id int,
     foreign key (job_id) references jobs(job_id),
@@ -120,15 +120,41 @@ inner join locations l on d.location_id = l.location_id
 inner join countries c on l.country_id = c.country_id
 where c.country_name = 'Japan';
 
-select e.employee_id, e.last_name, manager_id, last_name
-from employees e 
+select e.employee_id, e.last_name, e.manager_id, m.last_name
+from employees e left join employees m on e.manager_id = m.employee_id;
+
+select e.first_name, e.last_name, e.hire_date
+from employees e inner join employees m 
+on m.first_name = 'Lex' and m.last_name = 'De Haan'
+where m.hire_date < e.hire_date;
+
+select d.department_name, count(e.department_id) as number_of_employees
+from departments d left join employees e on e.department_id = d.department_id
+group by d.department_name;
+
+select j.employee_id, j.job_id, datediff(j.end_date,j.start_date) as number_of_days
+from job_history j
+where j.department_id = 30;
+
+select d.department_name, d.manager_id, l.city, c.country_name
+from departments d inner join locations l on d.location_id = l.location_id
+inner join countries c on l.country_id = c.country_id;
+
+select d.department_name, round(avg(e.salary),2) as average_salary
+from departments d left join employees e on d.department_id = e.department_id
+group by d.department_name;
 
 
 create table job_grades(
-	grade_level varchar(2) primary key,
-    lowest_sal int,
-    highest_sal int
+    grade_level varchar(2) primary key,
+    lowest_sal numeric(8,2),
+    highest_sal numeric(8,2)
 );
+
+alter table jobs add column grade_level varchar(2);
+alter table jobs add constraint fk_grade_level foreign key (grade_level) references job_grades(grade_level);
+
+
 
 
 

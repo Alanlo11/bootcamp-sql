@@ -353,6 +353,7 @@ insert into customers values (5, 'Mary Chan', 'mary@gmail.com');-- OK
 
 -- Add FK
 alter table orders add constraint fk_customer_id foreign key(customer_id) references customers(id)
+select * from orders;
 
 select * from orders
 insert into orders values (8, 9000, 10, date_format('2024-08-04', '%y-%m-%d'))
@@ -389,14 +390,45 @@ select id, total_amount
 from orders;
 
 -- Combine tow result set, no matter any duplicated
-select 1
+select 
 from customers
 union all
 select 1
 from orders;
 
 
+-- Select * -> slower performance
+-- View -> selecting the actual at that moment (Not the moment create view)
+select * from orders;
+create view order_202408
+as
+select * from orders
+where tran_date between date_format('2024-08-01', '%y-%m-%d') and date_format('2024-08-31', '%y-%m-%d');
 
+
+-- PLSQL, PROCEDURE (IF ELSE, FOR LOOP, CURSOR, SQL)
+-- View: Real-time data (i.e. Actual real-time "orders" table data)
+
+-- Sample Pro
+P_ID int;
+P_TOTAL_AMOUNT numeric(13,2);
+P_CUSTOMER int;
+P_TRAN_DATE date;
+
+CURSOR C_ORDERS
+IS
+select *
+from orders_202408;
+
+FOR rec IN C_ORDERS LOOP
+	IF () THEN
+    ELSE
+    END IF
+END LOOP;
+
+select * 
+into P_ID, P_TOTAL_AMOUNT, P_CUSTOMMER_ID, P_TRAN_DATE
+from order_202408;
 
 
 
