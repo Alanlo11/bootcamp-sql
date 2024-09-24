@@ -60,7 +60,7 @@ having max(sum(case when p.player_id = m.first_player then m.first_score else m.
 -- ans
 with ranking as(
 select p.group_id, p.player_id as winner_id, sum(case when p.player_id = m.first_player then m.first_score else m.second_score end) as total_score,
-row_number() over(partition by p.group_id order by coalesce(sum(case when p.player_id = m.first_player then m.first_score else m.second_score end),0)desc,p.player_id asc) as ranking
+row_number() over(partition by p.group_id order by ifnull(sum(case when p.player_id = m.first_player then m.first_score else m.second_score end),0)desc,p.player_id asc) as ranking
 from players p 
 left join matches m on p.player_id in(m.first_player,m.second_player)
 group by p.group_id, p.player_id
