@@ -38,7 +38,7 @@ insert into bonus (worker_ref_id, bonus_amount, bonus_date) values ((select work
 insert into bonus (worker_ref_id, bonus_amount, bonus_date) values ((select worker_id from worker where first_name = 'Satish') , 4500, '2022-11-02');
 
 -- Task 2:
-select w.salary
+select w.salary,w.first_name
 from worker w
 order by w.salary desc
 limit 1 offset 1;
